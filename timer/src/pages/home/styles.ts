@@ -27,6 +27,32 @@ export const FormContainer = styled.div`
   font-weight: bold;
   flex-wrap: wrap;
 `
+const BaseInput = styled.input`
+  background: transparent;
+  border: 0;
+  height: 2.5rem;
+  border-bottom: 2px solid ${(props) => props.theme['gray-500']};
+  font-weight: bold;
+  font-size: 1.125rem;
+  padding: 0 0.5rem;
+  color: ${(props) => props.theme['gray-100']};
+
+  &:focus {
+    box-shadow: none;
+    border-color: ${(props) => props.theme['green-500']};
+  }
+
+  &::placeholder {
+    ${(props) => props.theme['gray-500']};
+  }
+`
+export const TaskInput = styled(BaseInput)`
+  flex: 1;
+`
+
+export const MinutesAmountInput = styled(BaseInput)`
+  width: 4rem;
+`
 
 export const CountDownContainer = styled.div`
   font-family: 'Roboto Mono', monospace;
