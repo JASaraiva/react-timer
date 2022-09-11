@@ -1,11 +1,11 @@
 import { HandPalm, Play } from 'phosphor-react'
-import { useEffect, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as zod from 'zod'
 import { differenceInSeconds } from 'date-fns'
-import { NewCycleForm } from './newCycleForm'
-import { CountDown } from './countDown'
+import { NewCycleForm } from './components/newCycleForm'
+import { CountDown } from './components/countDown'
 import {
   HomeContainer,
   StartCountDownButton,
@@ -33,6 +33,12 @@ interface Cycle {
   interruptedDate?: Date
   finishedDate?: Date
 }
+
+interface CyclesContextType {
+  activeCycle: Cycle | undefined
+}
+
+const CyclesContext = createContext({} as CyclesContextType)
 
 export function Home() {
   const [cycles, setCycles] = useState<Cycle[]>([])
@@ -142,19 +148,24 @@ export function Home() {
   return (
     <HomeContainer>
       <form onSubmit={handleSubmit(handleCreateNewCycle)} action="">
-        <NewCycleForm />
-        <CountDown />
-        {activeCycle ? (
-          <StopCountDownButton onClick={handleInterruptCycle} type="button">
-            <HandPalm size={24} />
-            Interromper
-          </StopCountDownButton>
-        ) : (
-          <StartCountDownButton disabled={isButtonSubmitEnabled} type="submit">
-            <Play size={24} />
-            Começar
-          </StartCountDownButton>
-        )}
+        <CyclesContext.Provider value={{ activeCycle }}>
+          <NewCycleForm />
+          <CountDown />
+          {activeCycle ? (
+            <StopCountDownButton onClick={handleInterruptCycle} type="button">
+              <HandPalm size={24} />
+              Interromper
+            </StopCountDownButton>
+          ) : (
+            <StartCountDownButton
+              disabled={isButtonSubmitEnabled}
+              type="submit"
+            >
+              <Play size={24} />
+              Começar
+            </StartCountDownButton>
+          )}
+        </CyclesContext.Provider>
       </form>
     </HomeContainer>
   )
